@@ -1,0 +1,151 @@
+```html
+{% extends 'base.html' %}
+{% from "_form_macros.html" import render_field %}
+
+{% block content %}
+<!--
+ASCII Mockup for History Page:
++------------------------------------------------------+
+| [Logo] Forensic Image Detection System               |
+| Home | Upload | History | About | (User)            |
++------------------------------------------------------+
+|                                                      |
+|                     RIWAYAT ANALISIS                 |
+|                                                      |
+|   Filter: [Tipe Hasil v] [Dari Tgl:    ] [Smp Tgl:    ] [Urutkan v] [Filter] [Reset] |
+|   +-----------------------------------------------------------------------------+   |
+|   | [Thumb] sample1.jpg | Copy-Move (78%) | 15 Mei 2025 | [Lihat] [Hapus]       |   |
+|   | [Thumb] nature.png  | Authentic (99%) | 14 Mei 2025 | [Lihat] [Hapus]       |   |
+|   | [Thumb] edit.jpg    | Splicing (85%)  | 12 Mei 2025 | [Lihat] [Hapus]       |   |
+|   +-----------------------------------------------------------------------------+   |
+|                                                      |
+|                     [ < ] [ 1 ] [ 2 ] [ 3 ] [ > ]    |
+|                                                      |
++------------------------------------------------------+
+| © 2025 Sistem Deteksi Forensik Gambar                |
++------------------------------------------------------+
+-->
+<div class="history-page terminal-container">
+    <div class="history-header terminal-header">
+        <h2 class="terminal-title">Riwayat Analisis Gambar Anda</h2>
+    </div>
+
+    <div class="history-content">
+        <form method="POST" action="{{ url_for('main.history') }}" class="filter-form card">
+            {{ form.hidden_tag() }}
+            <h3 class="section-subtitle">Filter dan Urutkan Riwayat</h3>
+            <div class="filter-grid">
+                {{ render_field(form.result_type, class="filter-select") }}
+                {{ render_field(form.date_from, class="date-filter", type="date") }}
+                {{ render_field(form.date_to, class="date-filter", type="date") }}
+                {{ render_field(form.sort_by, class="filter-select") }}
+            </div>
+            <div class="filter-actions">
+                {{ form.submit_filter(class="btn btn-primary") }}
+                <button type="submit" name="reset_filter_btn" value="1" class="btn btn-secondary" onclick="document.getElementById('reset_filter_hidden').value='1';">Reset Filter</button>
+                {{ form.reset_filter(id="reset_filter_hidden") }} {# Hidden field #}
+            </div>
+        </form>
+
+        {% if analyses %}
+            <div class="history-list">
+                {% for analysis_item in analyses %}
+                <div class="history-item card">
+                    <div class="history-thumbnail">
+                        {% if thumbnails[analysis_item.id] %}
+                            <img src="{{ url_for('main.serve_uploaded_file', filename=thumbnails[analysis_item.id]) }}" 
+                                 alt="Thumbnail {{ analysis_item.original_filename }}">
+                        {% else %}
+                            <div class="thumbnail-placeholder">[No Preview]</div>
+                        {% endif %}
+                    </div>
+                    <div class="history-details">
+                        <h4 class="history-filename">{{ analysis_item.original_filename }}</h4>
+                        <p class="history-result">
+                            Status: <span class="status-{{ analysis_item.status|lower }}">{{ analysis_item.status|capitalize }}</span>
+                            {% if analysis_item.is_complete and analysis_item.status == 'completed' %}
+                                <br>Hasil: <strong class="status-{{ analysis_item.result_type|lower|replace(' ', '-') }}">{{ analysis_item.result_type }}</strong> 
+                                ({{ "%.1f"|format(analysis_item.confidence) }}% yakin)
+                            {% elif analysis_item.status == 'error' %}
+                                <br><span class="status-error">Analisis Gagal</span>
+                            {% elif analysis_item.status == 'processing' %}
+                                <br>Progres: {{ "%.1f"|format(analysis_item.progress) }}%
+                            {% endif %}
+                        </p>
+                        <p class="history-date">Dianalisis pada: {{ analysis_item.created_at.strftime('%d %b %Y, %H:%M') }}</p>
+                    </div>
+                    <div class="history-actions">
+                        {% if analysis_item.status == 'completed' %}
+                            <a href="{{ url_for('main.results', analysis_id=analysis_item.id) }}" class="btn btn-sm btn-success">Lihat Hasil</a>
+                        {% elif analysis_item.status == 'processing' or analysis_item.status == 'queued' %}
+                            <a href="{{ url_for('main.analysis_progress', analysis_id=analysis_item.id) }}" class="btn btn-sm btn-info">Lihat Progres</a>
+                        {% elif analysis_item.status == 'error' %}
+                             <a href="{{ url_for('main.results', analysis_id=analysis_item.id) }}" class="btn btn-sm btn-warning">Lihat Error</a>
+                        {% endif %}
+                        
+                        <button class="btn btn-sm btn-danger" onclick="confirmDelete('{{ analysis_item.id }}', '{{ analysis_item.original_filename }}')">Hapus</button>
+                        <form id="deleteForm-{{ analysis_item.id }}" action="{{ url_for('main.delete_analysis_route', analysis_id=analysis_item.id) }}" method="POST" style="display: none;">
+                             {{ form.hidden_tag() }} {# Atau token CSRF global jika disetup #}
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if pagination and pagination.pages > 1 %}
+            <nav aria-label="Page navigation" class="pagination-nav">
+                <ul class="pagination">
+                    <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                        <a class="page-link" href="{{ url_for('main.history', page=pagination.prev_num) if pagination.has_prev else '#'}}">&laquo;</a>
+                    </li>
+                    {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                        {% if page_num %}
+                            <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('main.history', page=page_num) }}">{{ page_num }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                        <a class="page-link" href="{{ url_for('main.history', page=pagination.next_num) if pagination.has_next else '#'}}">&raquo;</a>
+                    </li>
+                </ul>
+            </nav>
+            {% endif %}
+
+        {% else %}
+            <p class="no-history">Anda belum memiliki riwayat analisis.</p>
+            <div class="text-center">
+                <a href="{{ url_for('main.upload') }}" class="btn btn-primary">Mulai Analisis Pertama Anda</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmDelete(analysisId, filename) {
+    if (confirm(`Apakah Anda yakin ingin menghapus analisis untuk file "${filename}"? Tindakan ini tidak dapat diurungkan.`)) {
+        document.getElementById(`deleteForm-${analysisId}`).submit();
+    }
+}
+// Skrip untuk menangani reset filter
+document.addEventListener('DOMContentLoaded', function() {
+    const resetBtn = document.querySelector('button[name="reset_filter_btn"]');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function(e) {
+            // Mengosongkan field filter secara manual sebelum submit reset
+            const form = this.closest('form');
+            form.querySelector('#result_type').value = '';
+            form.querySelector('#date_from').value = '';
+            form.querySelector('#date_to').value = '';
+            form.querySelector('#sort_by').value = 'created_at_desc'; // Atau default value Anda
+            // Biarkan submit form berjalan dengan reset_filter_hidden = 1
+        });
+    }
+});
+</script>
+{% endblock %}
+```

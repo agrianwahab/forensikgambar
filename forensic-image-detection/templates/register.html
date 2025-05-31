@@ -1,0 +1,54 @@
+```html
+{% extends "base.html" %}
+{% from "_form_macros.html" import render_field %}
+
+{% block title %}Register - {{ super() }}{% endblock %}
+
+{% block content %}
+<!--
+ASCII Mockup for Register Page:
++------------------------------------------------------+
+| [Logo] Forensic Image Detection System               |
+| Home | About | (Login)                             |
++------------------------------------------------------+
+|                                                      |
+|                  REGISTRASI PENGGUNA BARU            |
+|                                                      |
+|   Nama:         [________________________________]   |
+|   Email:        [________________________________]   |
+|   Password:     [________________________________]   |
+|   Konf. Pass:   [________________________________]   |
+|                                                      |
+|                      [ REGISTER ]                    |
+|                                                      |
+|   Sudah punya akun? [ Login di sini ]                |
+|                                                      |
++------------------------------------------------------+
+| © 2025 Sistem Deteksi Forensik Gambar                |
++------------------------------------------------------+
+-->
+<div class="auth-page terminal-container">
+    <div class="auth-header terminal-header">
+        <h2 class="terminal-title">Registrasi Akun Baru</h2>
+    </div>
+    <div class="auth-content">
+        <form method="POST" action="{{ url_for('auth.register') }}" novalidate>
+            {{ form.hidden_tag() }}
+
+            {{ render_field(form.name, placeholder="Masukkan nama lengkap Anda") }}
+            {{ render_field(form.email, placeholder="Masukkan alamat email valid") }}
+            {{ render_field(form.password, placeholder="Minimal 8 karakter") }}
+            {{ render_field(form.confirm_password, placeholder="Ulangi password Anda") }}
+            
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary btn-block") }}
+            </div>
+        </form>
+        <hr class="auth-divider">
+        <div class="auth-links">
+            <p>Sudah punya akun? <a href="{{ url_for('auth.login') }}">Login di sini</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+```

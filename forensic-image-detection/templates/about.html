@@ -1,0 +1,139 @@
+```html
+{% extends 'base.html' %}
+
+{% block content %}
+<!--
+ASCII Mockup for About Page:
++------------------------------------------------------+
+| [Logo] Forensic Image Detection System               |
+| Home | Upload | History | About | (User)            |
++------------------------------------------------------+
+|                                                      |
+|              TENTANG SISTEM DETEKSI FORENSIK         |
+|                                                      |
+|   Pendahuluan:                                       |
+|   Sistem ini adalah platform canggih untuk analisis  |
+|   keaslian gambar digital...                         |
+|                                                      |
+|   Metodologi Deteksi:                                |
+|   - Copy-Move: Algoritma SIFT, ORB, Block matching |
+|   - Splicing: Analisis noise, ELA, tekstur         |
+|   - Autentik: Verifikasi metadata, konsistensi     |
+|                                                      |
+|   Tim Pengembang:                                    |
+|   - Dr. Forensik Digital                             |
+|   - Prof. Analis Gambar                              |
+|                                                      |
+|   Kontak: info@forensikgambar.id                     |
+|                                                      |
++------------------------------------------------------+
+| © 2025 Sistem Deteksi Forensik Gambar                |
++------------------------------------------------------+
+-->
+<div class="about-page terminal-container">
+    <div class="about-header terminal-header">
+        <h2 class="terminal-title">Tentang Sistem Deteksi Forensik Gambar</h2>
+    </div>
+    
+    <div class="about-content">
+        <section class="about-section">
+            <h3 class="section-subtitle">Selamat Datang di Platform Analisis Keaslian Gambar</h3>
+            <p>Sistem Deteksi Forensik Gambar ini adalah sebuah platform canggih yang dirancang untuk membantu para profesional, peneliti, dan individu dalam menganalisis keaslian gambar digital. Di era digital dimana manipulasi gambar menjadi semakin mudah, kebutuhan akan alat yang andal untuk verifikasi gambar menjadi sangat penting. Sistem kami menggunakan pendekatan multi-algoritma dan pipeline analisis 16-tahap untuk memberikan hasil yang komprehensif dan akurat.</p>
+        </section>
+        
+        <section class="about-section">
+            <h3 class="section-subtitle">Metodologi Deteksi Unggulan</h3>
+            <p>Kami menggabungkan berbagai teknik analisis forensik terkemuka untuk mendeteksi berbagai jenis manipulasi:</p>
+            <div class="detection-methods-grid">
+                <div class="method-card">
+                    <div class="method-icon">[ICON: Copy-Move]</div>
+                    <h4>Deteksi Copy-Move</h4>
+                    <p>Menggunakan kombinasi feature detectors (SIFT, ORB, AKAZE), RANSAC verification, dan block matching untuk mengidentifikasi area gambar yang disalin dan ditempelkan dalam gambar yang sama.</p>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-icon">[ICON: Splicing]</div>
+                    <h4>Deteksi Splicing</h4>
+                    <p>Menganalisis inkonsistensi dalam pola noise, artefak kompresi JPEG (termasuk JPEG ghost), domain frekuensi (DCT), tekstur (GLCM & LBP), densitas edge, dan konsistensi iluminasi untuk mendeteksi penggabungan dari gambar berbeda.</p>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-icon">[ICON: ELA]</div>
+                    <h4>Error Level Analysis (ELA) Lanjut</h4>
+                    <p>Implementasi ELA multi-kualitas untuk mengidentifikasi area dengan tingkat kompresi yang berbeda. Analisis regional dan statistik ELA digunakan untuk meningkatkan akurasi.</p>
+                </div>
+                 <div class="method-card">
+                    <div class="method-icon">[ICON: Metadata]</div>
+                    <h4>Verifikasi Metadata EXIF</h4>
+                    <p>Pemeriksaan komprehensif terhadap metadata EXIF untuk mencari inkonsistensi, tanda-tanda editing software, dan anomali waktu.</p>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon">[ICON: ML]</div>
+                    <h4>Klasifikasi Machine Learning</h4>
+                    <p>Sebuah feature vector dari 25+ parameter diumpankan ke model ensemble machine learning untuk klasifikasi akhir (Copy-Move, Splicing, Autentik) beserta skor kepercayaan.</p>
+                </div>
+                 <div class="method-card">
+                    <div class="method-icon">[ICON: Localization]</div>
+                    <h4>Lokalisasi Area Manipulasi</h4>
+                    <p>Menggunakan teknik K-Means clustering pada fitur ELA dan warna untuk memprediksi dan menyorot area yang kemungkinan dimanipulasi pada gambar.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="about-section">
+            <h3 class="section-subtitle">Pipeline Analisis 16-Tahap</h3>
+            <p>Setiap gambar yang diunggah melewati pipeline analisis yang ketat:</p>
+            <ol class="pipeline-list">
+                <li>Validasi File & Ekstraksi Metadata Awal</li>
+                <li>Preprocessing Gambar Lanjut (Normalisasi, Denoising jika perlu)</li>
+                <li>Analisis Error Level Multi-Kualitas (ELA)</li>
+                <li>Ekstraksi Fitur Multi-Detector (SIFT, ORB, AKAZE)</li>
+                <li>Deteksi Copy-Move dengan Verifikasi RANSAC</li>
+                <li>Analisis Pencocokan Blok (Block Matching)</li>
+                <li>Analisis Konsistensi Noise Lanjut</li>
+                <li>Analisis Artefak JPEG & Deteksi JPEG Ghost</li>
+                <li>Analisis Domain Frekuensi (DCT)</li>
+                <li>Analisis Konsistensi Tekstur (GLCM & LBP)</li>
+                <li>Analisis Konsistensi Densitas Edge</li>
+                <li>Analisis Konsistensi Iluminasi</li>
+                <li>Analisis Statistik Multi-Channel Gambar</li>
+                <li>Verifikasi Metadata EXIF Mendalam</li>
+                <li>Lokalisasi Area Manipulasi Potensial (K-Means Clustering)</li>
+                <li>Persiapan Feature Vector & Klasifikasi Machine Learning</li>
+            </ol>
+        </section>
+
+        <section class="about-section">
+            <h3 class="section-subtitle">Tim Pengembang (Contoh)</h3>
+            <div class="team-members">
+                <div class="team-member">
+                    <div class="member-avatar-placeholder">[Avatar]</div>
+                    <h4>Dr. Andi Forensik</h4>
+                    <p>Peneliti Utama & Arsitek Sistem</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar-placeholder">[Avatar]</div>
+                    <h4>Budi Algoritma, M.Kom.</h4>
+                    <p>Spesialis Deteksi & Pengembang ML</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar-placeholder">[Avatar]</div>
+                    <h4>Citra Webdev, S.T.</h4>
+                    <p>Pengembang Web & UI/UX Designer</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="about-section">
+            <h3 class="section-subtitle">Kontak & Dukungan</h3>
+            <p>Untuk pertanyaan, dukungan teknis, atau kolaborasi penelitian, silakan hubungi kami melalui:</p>
+            <ul class="contact-info">
+                <li>Email: <a href="mailto:dukungan@forensikgambar.id">dukungan@forensikgambar.id</a></li>
+                <li>Forum Komunitas: <a href="#">forum.forensikgambar.id</a> (Contoh)</li>
+                <li>Alamat Kantor: Gedung CyberTech Lt. 10, Jl. Inovasi Digital No. 404, Jakarta Pusat</li>
+            </ul>
+        </section>
+    </div>
+</div>
+{% endblock %}
+```

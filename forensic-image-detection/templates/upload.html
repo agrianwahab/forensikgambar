@@ -1,0 +1,141 @@
+``html
+{% extends 'base.html' %}
+{% from "_form_macros.html" import render_field %}
+
+{% block content %}
+<!--
+ASCII Mockup for Upload Page:
++------------------------------------------------------+
+| [Logo] Forensic Image Detection System               |
+| Home | Upload | History | About | (User)            |
++------------------------------------------------------+
+|                                                      |
+|                  UPLOAD GAMBAR UNTUK ANALISIS        |
+|                                                      |
+|   +----------------------------------------------+   |
+|   |                                              |   |
+|   |   Drag & Drop Gambar Disini atau Klik Browse |   |
+|   |   (Format: JPG, PNG, BMP, TIFF, WEBP)        |   |
+|   |                                              |   |
+|   +----------------------------------------------+   |
+|                                                      |
+|   Nama File: [ sample.jpg ]                          |
+|   Ukuran:    [ 2.3 MB ]                              |
+|   Dimensi:   [ 1920x1080 ]                           |
+|                                                      |
+|   Opsi Ekspor:                                       |
+|   [x] Export PNG   [ ] Export PDF   [ ] Export DOCX  |
+|                                                      |
+|                  [ MULAI ANALISIS ]                  |
+|                                                      |
++------------------------------------------------------+
+| © 2025 Sistem Deteksi Forensik Gambar                |
++------------------------------------------------------+
+-->
+<div class="upload-page terminal-container">
+    <div class="upload-header terminal-header">
+        <h2 class="terminal-title">Unggah Gambar untuk Dianalisis</h2>
+        <a href="{{ url_for('main.index') }}" class="btn btn-secondary btn-sm">[Kembali ke Beranda]</a>
+    </div>
+    
+    <div class="upload-content">
+        <form action="{{ url_for('main.upload') }}" method="post" enctype="multipart/form-data" id="uploadForm" novalidate>
+            {{ form.hidden_tag() }} {# Untuk CSRF token #}
+
+            <div class="form-group dropzone-container">
+                {{ render_field(form.image, class="file-input-hidden", id="fileInput") }}
+                <label for="fileInput" class="dropzone" id="dropzone">
+                    <div class="dropzone-content">
+                        <div class="dropzone-icon">[ICON: Upload]</div>
+                        <p>Seret & Lepas Gambar Disini</p>
+                        <p class="dropzone-text-sm">atau klik untuk memilih file</p>
+                        <p class="dropzone-text-xs">Format yang didukung: {{ current_app.config.ALLOWED_EXTENSIONS|join(', ') }}</p>
+                        <p class="dropzone-text-xs">Ukuran maks: {{ current_app.config.MAX_CONTENT_LENGTH // (1024*1024) }}MB</p>
+                    </div>
+                </label>
+                 {% if form.image.errors %}
+                    <div class="invalid-feedback d-block">
+                        {% for error in form.image.errors %}
+                            <span>{{ error }}</span><br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div id="fileInfoPreview" class="file-info-preview" style="display: none;">
+                <h3 class="preview-title">Pratinjau & Informasi File</h3>
+                <div class="preview-area">
+                    <img id="imagePreview" src="#" alt="Pratinjau Gambar" style="display:none; max-width:100%; max-height:200px; margin-bottom:10px;"/>
+                    <div id="previewPlaceholder" class="preview-placeholder-text">Pratinjau akan muncul di sini</div>
+                </div>
+                <div class="file-details-list">
+                    <p><strong>Nama File:</strong> <span id="filenameDisplay">-</span></p>
+                    <p><strong>Ukuran File:</strong> <span id="filesizeDisplay">-</span></p>
+                    <p><strong>Tipe File:</strong> <span id="filetypeDisplay">-</span></p>
+                    <p><strong>Dimensi:</strong> <span id="dimensionsDisplay" style="display:none;">-</span></p>
+                </div>
+            </div>
+            
+            <div class="form-group options-container">
+                <h4 class="options-title">Opsi Ekspor Hasil Analisis:</h4>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        {{ render_field(form.export_png, class="form-check-input") }}
+                    </div>
+                    <div class="checkbox-item">
+                        {{ render_field(form.export_pdf, class="form-check-input") }}
+                    </div>
+                    <div class="checkbox-item">
+                         {{ render_field(form.export_docx, class="form-check-input") }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group submit-container">
+                {{ form.submit(class="btn btn-primary btn-lg btn-block", id="submitAnalysisBtn") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+{% endblock %}
+```
+Tambahkan file `_form_macros.html` di `templates/` (atau `templates/components/`) untuk `render_field`:
+```html
+{# templates/_form_macros.html #}
+{% macro render_field(field, label_visible=true) %}
+  <div class="form-group {% if field.errors %}has-error{% endif %}">
+    {% if label_visible and field.type != 'BooleanField' and field.type != 'SubmitField' and field.type != 'CSRFTokenField' and field.type != 'HiddenField' %}
+      {{ field.label(class="form-label") }}
+    {% endif %}
+    
+    {% if field.type == 'BooleanField' %}
+      <div class="form-check">
+        {{ field(class="form-check-input " + kwargs.pop('class', '')) }}
+        {{ field.label(class="form-check-label") }}
+      </div>
+    {% elif field.type == 'FileField' %}
+        {{ field(**kwargs) }} {# FileField tidak butuh class form-control standar #}
+    {% elif field.type == 'SubmitField' %}
+        {{ field(class="btn " + kwargs.pop('class', 'btn-primary')) }}
+    {% elif field.type == 'HiddenField' or field.type == 'CSRFTokenField' %}
+         {{ field() }}
+    {% else %}
+      {{ field(class="form-control " + kwargs.pop('class', ''), **kwargs) }}
+    {% endif %}
+
+    {% if field.errors %}
+      <div class="invalid-feedback">
+        {% for error in field.errors %}
+          <span>{{ error }}</span><br>
+        {% endfor %}
+      </div>
+    {% elif field.description %}
+        <small class="form-text text-muted">{{ field.description }}</small>
+    {% endif %}
+  </div>
+{% endmacro %}
+```

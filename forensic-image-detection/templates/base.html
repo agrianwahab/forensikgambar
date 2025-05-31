@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% if title %}{{ title }} - {% endif %}Sistem Deteksi Forensik Gambar{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forensic.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icons/favicon.ico') }}" type="image/x-icon">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="grid-background">
+    <div class="container-fluid">
+        {% include 'components/navbar.html' %}
+        
+        <main class="content-wrapper container">
+            {% include 'components/alerts.html' %}
+            {% block content %}{% endblock %}
+        </main>
+        
+        {% include 'components/footer.html' %}
+    </div>
+    
+    {% include 'components/modals.html' %} {# Modals bisa diletakkan di sini atau sebelum body end #}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,332 @@
+/* static/css/components.css */
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.5rem; /* Padding disesuaikan */
+  background-color: rgba(10, 22, 40, 0.9); /* forensic-bg-dark dengan alpha */
+  border-bottom: 1px solid var(--forensic-border);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 1030; /* Di atas konten lain */
+  backdrop-filter: blur(8px);
+  flex-wrap: wrap; /* Agar bisa wrap di mobile */
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  font-family: var(--font-family-monospace);
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--forensic-text-primary);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.logo:hover {
+  color: var(--forensic-primary);
+}
+.logo-img {
+    height: 30px; /* Sesuaikan ukuran logo */
+    margin-right: 0.5rem;
+    /* Filter untuk efek biru jika logo putih/terang: filter: invert(48%) sepia(94%) saturate(1270%) hue-rotate(196deg) brightness(99%) contrast(97%); */
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem; /* Jarak antar item menu */
+  flex-wrap: wrap; /* Agar bisa wrap di mobile */
+}
+
+.navbar-item {
+  color: var(--forensic-text-secondary);
+  font-family: var(--font-family-monospace);
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.5rem 0; /* Padding atas bawah agar area klik lebih besar */
+  transition: color 0.2s ease;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+.navbar-item:hover, .navbar-item.active {
+  color: var(--forensic-primary);
+  border-bottom-color: var(--forensic-primary);
+}
+
+.navbar-auth {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: 1rem; /* Jarak dari menu utama */
+}
+.navbar-user {
+    color: var(--forensic-text-muted);
+    font-size: 0.85rem;
+}
+.navbar-auth .btn {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+/* Navbar toggler for mobile */
+.navbar-toggler {
+    display: none; /* Sembunyikan di desktop */
+    padding: .25rem .75rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    background-color: transparent;
+    border: 1px solid var(--forensic-border);
+    border-radius: .25rem;
+    color: var(--forensic-text-secondary);
+}
+.navbar-toggler:focus {
+    outline: none;
+}
+.navbar-toggler span { /* Icon burger */
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: var(--forensic-text-secondary);
+    margin: 4px 0;
+    border-radius: 1px;
+}
+
+
+/* Footer */
+.footer {
+  background-color: var(--forensic-bg-dark);
+  border-top: 1px solid var(--forensic-border);
+  padding: 2rem 1rem; /* Padding disesuaikan */
+  text-align: center;
+  margin-top: auto; /* Dorong footer ke bawah */
+  flex-shrink: 0; /* Cegah footer menyusut */
+}
+.footer-content {
+  color: var(--forensic-text-muted);
+  font-size: 0.85rem;
+}
+.footer-links {
+    margin-bottom: 0.75rem;
+}
+.footer-links a {
+    color: var(--forensic-text-secondary);
+    margin: 0 0.5rem;
+    font-size: 0.8rem;
+}
+.footer-links a:hover {
+    color: var(--forensic-primary);
+}
+.copyright-text { margin-bottom: 0.25rem; }
+.attribution-text { font-size: 0.75rem; opacity: 0.7; }
+
+/* Modals */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 22, 40, 0.85); /* forensic-bg-dark dengan alpha lebih pekat */
+  z-index: 1050; /* Di atas navbar */
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  backdrop-filter: blur(5px);
+}
+.modal.active { /* Class untuk menampilkan modal via JS */
+  display: flex;
+}
+.modal-dialog {
+    position: relative;
+    width: auto;
+    margin: .5rem;
+    pointer-events: none;
+    max-width: 600px; /* Lebar modal default */
+}
+.modal.active .modal-dialog { /* Animasi saat modal aktif */
+    animation: modalFadeIn 0.3s ease-out;
+}
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: var(--forensic-bg-medium);
+  background-clip: padding-box;
+  border: 1px solid var(--forensic-primary);
+  border-radius: 0.5rem; /* Radius lebih besar */
+  outline: 0;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--forensic-border);
+  border-top-left-radius: calc(0.5rem - 1px);
+  border-top-right-radius: calc(0.5rem - 1px);
+}
+.modal-title {
+  margin-bottom: 0;
+  line-height: 1.5;
+  color: var(--forensic-primary);
+  font-size: 1.25rem;
+}
+.close-modal {
+  padding: 0.5rem; /* Area klik lebih besar */
+  margin: -0.5rem -0.5rem -0.5rem auto;
+  background-color: transparent;
+  border: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--forensic-text-muted);
+  text-shadow: none;
+  opacity: 0.8;
+  cursor: pointer;
+}
+.close-modal:hover {
+  color: var(--danger-color);
+  opacity: 1;
+}
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1.25rem;
+  color: var(--forensic-text-secondary);
+}
+.modal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--forensic-border);
+  border-bottom-right-radius: calc(0.5rem - 1px);
+  border-bottom-left-radius: calc(0.5rem - 1px);
+}
+.modal-footer > * {
+  margin: 0.25rem;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Alerts */
+.flash-messages-container {
+    position: fixed; /* Atau absolute jika di dalam .content-wrapper */
+    top: 70px; /* Di bawah navbar */
+    right: 20px;
+    z-index: 1040;
+    min-width: 300px;
+    max-width: 400px;
+}
+.alert {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.3rem;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  animation: alertSlideIn 0.4s ease-out;
+}
+.alert-dismissible .close-alert {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.8rem 1rem;
+    color: inherit; /* Warna dari alert parent */
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    opacity: 0.7;
+    cursor: pointer;
+}
+.alert-dismissible .close-alert:hover { opacity: 1; }
+
+.alert-icon {
+  margin-right: 0.75rem;
+  font-size: 1.25rem;
+  line-height: 1; /* Jaga agar icon tidak menambah tinggi alert */
+}
+
+@keyframes alertSlideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.alert.fade:not(.show) { /* Untuk Bootstrap JS jika dipakai, atau custom JS */
+    opacity: 0;
+    transition: opacity 0.15s linear;
+}
+
+/* Dropzone (di forensic.css atau di sini) */
+.dropzone {
+  border: 2px dashed var(--forensic-border);
+  border-radius: 6px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  background-color: rgba(36, 59, 83, 0.3); /* forensic-bg-light transparan */
+  color: var(--forensic-text-secondary);
+}
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--forensic-primary);
+  background-color: rgba(59, 130, 246, 0.1); /* forensic-primary transparan */
+  color: var(--forensic-primary);
+}
+.dropzone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.dropzone-icon { /* Placeholder */
+  font-size: 3rem;
+  color: var(--forensic-secondary);
+  margin-bottom: 0.5rem;
+}
+.dropzone:hover .dropzone-icon {
+    color: var(--forensic-primary);
+}
+.dropzone-text-sm { font-size: 0.9rem; }
+.dropzone-text-xs { font-size: 0.75rem; color: var(--forensic-text-muted); }
+
+/* Pagination (di forensic.css atau di sini) */
+.pagination .page-link {
+    background-color: var(--forensic-bg-light);
+    border-color: var(--forensic-border);
+    color: var(--forensic-text-secondary);
+    margin: 0 2px; /* Jarak antar tombol pagination */
+    border-radius: 3px;
+}
+.pagination .page-link:hover {
+    background-color: var(--forensic-bg-medium);
+    border-color: var(--forensic-primary);
+    color: var(--forensic-primary);
+}
+.pagination .page-item.active .page-link {
+    background-color: var(--forensic-primary);
+    border-color: var(--forensic-primary);
+    color: white;
+}
+.pagination .page-item.disabled .page-link {
+    background-color: var(--forensic-bg-dark);
+    border-color: var(--forensic-border);
+    color: var(--forensic-text-muted);
+}

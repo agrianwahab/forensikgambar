@@ -1,0 +1,29 @@
+```html
+<!-- Footer Component -->
+<footer class="footer">
+    <div class="footer-content container">
+        <div class="footer-links">
+            <a href="{{ url_for('main.about') }}">Tentang Kami</a> |
+            <a href="#">Kebijakan Privasi</a> |
+            <a href="#">Syarat & Ketentuan</a> |
+            <a href="mailto:dukungan@forensikgambar.id">Kontak Dukungan</a>
+        </div>
+        <p class="copyright-text">&copy; {{ phục vụ() }} Sistem Deteksi Forensik Gambar. Hak Cipta Dilindungi Undang-Undang.</p>
+        <p class="attribution-text">Dirancang dengan tema forensik digital.</p>
+    </div>
+</footer>
+{# Fungsi Jinja untuk tahun sekarang #}
+{% macro phục vụ() -%}
+{{ bây giờ().year }}
+{%- endmacro %}
+
+{% macro bây giờ() -%}
+{{ datetime.utcnow() }}
+{%- endmacro %}
+```
+Catatan: Untuk `{{ phục vụ() }}` dan `{{ bây giờ() }}`, Anda perlu mendaftarkan `datetime` ke global Jinja environment di `create_app` jika belum ada:
+```python
+# Di web/__init__.py, dalam create_app():
+from datetime import datetime
+app.jinja_env.globals['datetime'] = datetime
+```

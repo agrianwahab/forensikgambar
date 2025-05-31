@@ -1,0 +1,122 @@
+```html
+{% extends 'base.html' %}
+
+{% block content %}
+<!--
+ASCII Mockup for Homepage:
++------------------------------------------------------+
+| [Logo] Forensic Image Detection System               |
+| Home | Upload | History | About | (Login/User)      |
++------------------------------------------------------+
+|                                                      |
+|      SISTEM DETEKSI FORENSIK GAMBAR CANGGIH          |
+|      Analisis Keaslian Gambar dengan Akurasi Tinggi  |
+|                                                      |
+|      [ MULAI ANALISIS ]   [ LIHAT RIWAYAT ]          |
+|                                                      |
++------------------------------------------------------+
+| Statistik Sistem:                                    |
+| Total Analisis: XXXX    | Akurasi Copy-Move: XX.X%   |
+| Akurasi Splicing: XX.X% | Waktu Rata-rata: X menit   |
++------------------------------------------------------+
+| Fitur Utama:                                         |
+| - Deteksi Copy-Move     - Analisis ELA Lanjut        |
+| - Deteksi Splicing      - Verifikasi Metadata        |
+| - Laporan Detail        - Real-time Progress         |
++------------------------------------------------------+
+| © 2025 Sistem Deteksi Forensik Gambar                |
++------------------------------------------------------+
+-->
+<div class="homepage">
+    <section class="hero-section text-center">
+        <div class="hero-content">
+            <h1 class="hero-title glow-text">SISTEM DETEKSI FORENSIK GAMBAR</h1>
+            <p class="hero-subtitle">Ungkap Keaslian Gambar Digital dengan Teknologi Analisis Mendalam.</p>
+            <div class="hero-actions">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('main.upload') }}" class="btn btn-primary btn-lg">Mulai Analisis Baru</a>
+                    <a href="{{ url_for('main.history') }}" class="btn btn-secondary btn-lg">Lihat Riwayat Analisis</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">Login untuk Analisis</a>
+                    <a href="{{ url_for('main.about') }}" class="btn btn-secondary btn-lg">Pelajari Lebih Lanjut</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-overview-section">
+        <h2 class="section-title text-center">Statistik & Akurasi Sistem</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">[ICON: Total]</div>
+                <div class="stat-value">{{ stats.total_analyzed_system }}</div>
+                <div class="stat-label">Total Gambar Dianalisis</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">[ICON: Copy-Move]</div>
+                <div class="stat-value">{{ stats.copy_move_accuracy }}%</div>
+                <div class="stat-label">Akurasi Deteksi Copy-Move</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">[ICON: Splicing]</div>
+                <div class="stat-value">{{ stats.splicing_accuracy }}%</div>
+                <div class="stat-label">Akurasi Deteksi Splicing</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">[ICON: Authentic]</div>
+                <div class="stat-value">{{ stats.authentic_accuracy }}%</div>
+                <div class="stat-label">Akurasi Verifikasi Keaslian</div>
+            </div>
+             <div class="stat-card">
+                <div class="stat-icon">[ICON: Time]</div>
+                <div class="stat-value">~{{ (stats.avg_time_seconds / 60)|round(1) }} menit</div>
+                <div class="stat-label">Waktu Analisis Rata-Rata</div>
+            </div>
+            {% if current_user.is_authenticated %}
+            <div class="stat-card">
+                <div class="stat-icon">[ICON: User]</div>
+                <div class="stat-value">{{ stats.total_analyzed_user }}</div>
+                <div class="stat-label">Analisis Anda</div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2 class="section-title text-center">Fitur Unggulan Sistem</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">[ICON: ELA]</div>
+                <h3 class="feature-title">Analisis ELA Multi-Kualitas</h3>
+                <p class="feature-description">Mengidentifikasi area manipulasi berdasarkan perbedaan level kompresi JPEG.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">[ICON: SIFT/ORB]</div>
+                <h3 class="feature-title">Deteksi Fitur Lanjut</h3>
+                <p class="feature-description">Menggunakan SIFT, ORB, dan AKAZE untuk deteksi copy-move yang presisi.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">[ICON: Noise]</div>
+                <h3 class="feature-title">Analisis Konsistensi Noise</h3>
+                <p class="feature-description">Mendeteksi anomali pada pola noise yang mengindikasikan splicing.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">[ICON: JPEG]</div>
+                <h3 class="feature-title">Analisis Artefak JPEG</h3>
+                <p class="feature-description">Mendeteksi JPEG ghost dan inkonsistensi kompresi.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">[ICON: ML]</div>
+                <h3 class="feature-title">Klasifikasi Machine Learning</h3>
+                <p class="feature-description">Menggunakan model ML untuk klasifikasi akhir dengan skor kepercayaan.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">[ICON: Report]</div>
+                <h3 class="feature-title">Laporan Detail & Ekspor</h3>
+                <p class="feature-description">Menyediakan laporan komprehensif dalam format DOCX, PDF, dan PNG.</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+```
